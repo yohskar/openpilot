@@ -71,6 +71,7 @@ class Controls:
     self.is_metric = params.get("IsMetric", encoding='utf8') == "1"
     self.is_ldw_enabled = params.get("IsLdwEnabled", encoding='utf8') == "1"
     internet_needed = (params.get("Offroad_ConnectivityNeeded", encoding='utf8') is not None) and (params.get("DisableUpdates") != b"1")
+    internet_needed = False
     community_feature_toggle = params.get("CommunityFeaturesToggle", encoding='utf8') == "1"
     openpilot_enabled_toggle = params.get("OpenpilotEnabledToggle", encoding='utf8') == "1"
     passive = params.get("Passive", encoding='utf8') == "1" or \
@@ -149,7 +150,7 @@ class Controls:
 
     self.events.clear()
     self.events.add_from_msg(CS.events)
-    self.events.add_from_msg(self.sm['dMonitoringState'].events)
+    #self.events.add_from_msg(self.sm['dMonitoringState'].events)
 
     # Handle startup event
     if self.startup_event is not None:
@@ -209,8 +210,8 @@ class Controls:
       self.events.add(EventName.radarCommIssue)
     elif not self.sm.all_alive_and_valid():
       self.events.add(EventName.commIssue)
-    if not self.sm['pathPlan'].mpcSolutionValid:
-      self.events.add(EventName.plannerError)
+    # if not self.sm['pathPlan'].mpcSolutionValid:
+    #   self.events.add(EventName.plannerError)
     if not self.sm['liveLocationKalman'].sensorsOK and not NOSENSOR:
       if self.sm.frame > 5 / DT_CTRL:  # Give locationd some time to receive all the inputs
         self.events.add(EventName.sensorDataInvalid)
@@ -218,10 +219,10 @@ class Controls:
       # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
       if not (SIMULATION or NOSENSOR):  # TODO: send GPS in carla
         self.events.add(EventName.noGps)
-    if not self.sm['pathPlan'].paramsValid:
-      self.events.add(EventName.vehicleModelInvalid)
-    if not self.sm['liveLocationKalman'].posenetOK:
-      self.events.add(EventName.posenetInvalid)
+    # if not self.sm['pathPlan'].paramsValid:
+    #   self.events.add(EventName.vehicleModelInvalid)
+    # if not self.sm['liveLocationKalman'].posenetOK:
+    #   self.events.add(EventName.posenetInvalid)
     if not self.sm['liveLocationKalman'].deviceStable:
       self.events.add(EventName.deviceFalling)
     if not self.sm['plan'].radarValid:
