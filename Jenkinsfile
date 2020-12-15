@@ -8,7 +8,7 @@ def phone(String ip, String step_label, String cmd) {
 echo \$\$ > /dev/cpuset/app/tasks || true
 echo \$PPID > /dev/cpuset/app/tasks || true
 mkdir -p /dev/shm
-chmod 777 /dev/shm
+chmod 777 /dev/shm || true
 cd ${env.TEST_DIR} || true
 ${cmd}
 exit 0
