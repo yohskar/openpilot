@@ -12,7 +12,7 @@ if [ -z "$TEST_DIR" ]; then
   exit 1
 fi
 
-if [ -d "$SOURCE_DIR" ]; then
+if [ ! -d "$SOURCE_DIR" ]; then
   git clone https://github.com/commaai/openpilot.git "$SOURCE_DIR"
 fi
 
