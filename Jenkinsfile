@@ -145,7 +145,7 @@ pipeline {
                 stage('Tici Build') {
                   steps {
                     phone_steps("tici", [
-                      ["build", "BUILD_SETUP=1 scons -j$(nproc)"],
+                      ["build", "BUILD_SETUP=1 scons -j16"],
                     ])
                   }
                 }
