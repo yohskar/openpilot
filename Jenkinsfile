@@ -12,7 +12,8 @@ chmod 777 /dev/shm || true
 cd ${env.TEST_DIR} || true
 ${cmd}
 exit 0
-EOF ; echo \$?"""
+sleep 10
+EOF"""
   }
 }
 
