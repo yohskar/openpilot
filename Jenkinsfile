@@ -11,8 +11,6 @@ mkdir -p /dev/shm
 chmod 777 /dev/shm || true
 cd ${env.TEST_DIR} || true
 ${cmd}
-exit 0
-sleep 10
 EOF"""
   }
 }
