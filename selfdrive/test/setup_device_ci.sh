@@ -8,12 +8,14 @@ if [ -z "$GIT_COMMIT" ]; then
 fi
 
 if [ -z "$TEST_DIR" ]; then
-
   echo "TEST_DIR must be set"
   exit 1
 fi
 
-# TODO: never clear qcom_replay cache
+if [ -d "$SOURCE_DIR" ]; then
+  git clone https://github.com/commaai/openpilot.git "$SOURCE_DIR"
+fi
+
 # clear scons cache dirs that haven't been written to in one day
 cd /tmp && find -name 'scons_cache_*' -type d -maxdepth 1 -mtime +1 -exec rm -rf '{}' \;
 
@@ -23,7 +25,7 @@ rm -rf /data/core
 # set up environment
 cd $SOURCE_DIR
 git reset --hard
-git fetch origin
+git fetch
 find . -maxdepth 1 -not -path './.git' -not -name '.' -not -name '..' -exec rm -rf '{}' \;
 git reset --hard $GIT_COMMIT
 git checkout $GIT_COMMIT
