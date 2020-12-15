@@ -4,7 +4,7 @@ def phone(String ip, String step_label, String cmd) {
   withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
     sh label: step_label,
        script: """
-               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} '${ci_env} /usr/bin/bash -lec' <<'EOF'
+               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} '${ci_env} /usr/bin/bash -e' <<'EOF'
 echo \$\$ > /dev/cpuset/app/tasks || true
 echo \$PPID > /dev/cpuset/app/tasks || true
 mkdir -p /dev/shm
@@ -39,7 +39,7 @@ pipeline {
 
   stages {
 
-    stage('Release Build') {
+    stage('Build release2') {
       agent {
         docker {
           image 'python:3.7.3'
@@ -104,6 +104,7 @@ pipeline {
             stage('parallel tests') {
               parallel {
 
+                /*
                 stage('Devel Build') {
                   environment {
                     CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : ' '}"
@@ -140,6 +141,7 @@ pipeline {
                     ])
                   }
                 }
+                */
 
                 stage('Tici Build') {
                   steps {
