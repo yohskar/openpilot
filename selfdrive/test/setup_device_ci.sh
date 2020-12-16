@@ -38,3 +38,5 @@ echo "git checkout took $SECONDS seconds"
 rsync -a --delete $SOURCE_DIR $TEST_DIR
 
 echo "$TEST_DIR synced with $GIT_COMMIT, took $SECONDS seconds"
+
+exit

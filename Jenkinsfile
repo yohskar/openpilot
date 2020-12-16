@@ -152,7 +152,9 @@ pipeline {
                             ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
                           }
                           sh label: "git checkout",
-                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${device_ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh"
+                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${device_ip} '${ci_env} /bin/bash -le' < selfdrive/test/setup_device_ci.sh"
+                          sh label: "build",
+                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${device_ip} '${ci_env} /bin/bash -le cd /data/openpilot && scons -j16'"
                         }
                       }
                     }
