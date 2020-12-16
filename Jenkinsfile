@@ -144,11 +144,13 @@ pipeline {
                 */
 
                 stage('Tici Build') {
-                  def ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
                   steps {
                     lock(resource: "", label: "tici", inversePrecedence: true, variable: 'device_ip', quantity: 1) {
                       timeout(time: 60, unit: 'MINUTES') {
                         withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
+                          script {
+                            ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
+                          }
                           sh label: "git chekcout",
                              script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${device_ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh"
                         }
