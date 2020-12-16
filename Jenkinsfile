@@ -13,6 +13,7 @@ cd ${env.TEST_DIR} || true
 ${cmd}
 exit 0
 EOF"""
+  }
 }
 
 def phone_steps(String device_type, steps) {
@@ -149,9 +150,7 @@ pipeline {
                       timeout(time: 60, unit: 'MINUTES') {
                         withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
                           sh label: "git chekcout",
-                             script: """
-                                     ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh
-                                     """
+                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh"
                         }
                       }
                     }
