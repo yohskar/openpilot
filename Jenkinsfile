@@ -144,7 +144,7 @@ pipeline {
                 */
 
                 stage('Tici Build') {
-                  //def ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
+                  def ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
                   steps {
                     lock(resource: "", label: "tici", inversePrecedence: true, variable: 'device_ip', quantity: 1) {
                       timeout(time: 60, unit: 'MINUTES') {
