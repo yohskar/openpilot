@@ -4,16 +4,15 @@ def phone(String ip, String step_label, String cmd) {
   withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
     sh label: step_label,
        script: """
-               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} \\\"${ci_env} /bin/bash -le <<'EOF'
+               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' <<'EOF'
 echo \$\$ > /dev/cpuset/app/tasks || true
 echo \$PPID > /dev/cpuset/app/tasks || true
 mkdir -p /dev/shm
-chmod 777 /dev/shm || true
+chmod 777 /dev/shm
 cd ${env.TEST_DIR} || true
 ${cmd}
 exit 0
-EOF\\\" """
-  }
+EOF"""
 }
 
 def phone_steps(String device_type, steps) {
@@ -144,7 +143,19 @@ pipeline {
                 */
 
                 stage('Tici Build') {
+                  //def ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
                   steps {
+                    lock(resource: "", label: "tici", inversePrecedence: true, variable: 'device_ip', quantity: 1) {
+                      timeout(time: 60, unit: 'MINUTES') {
+                        withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
+                          sh label: "git chekcout",
+                             script: """
+                                     ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh
+                                     """
+                        }
+                      }
+                    }
+
                     phone_steps("tici", [
                       ["build", "BUILD_SETUP=1 scons -j16"],
                     ])
