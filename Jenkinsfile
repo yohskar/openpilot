@@ -155,10 +155,6 @@ pipeline {
                         }
                       }
                     }
-
-                    phone_steps("tici", [
-                      ["build", "BUILD_SETUP=1 scons -j16"],
-                    ])
                   }
                 }
 
