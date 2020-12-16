@@ -150,7 +150,7 @@ pipeline {
                       timeout(time: 60, unit: 'MINUTES') {
                         withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
                           sh label: "git chekcout",
-                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh"
+                             script: "ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${device_ip} '${ci_env} /usr/bin/bash -le' < selfdrive/test/setup_device_ci.sh"
                         }
                       }
                     }
