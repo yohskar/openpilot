@@ -17,6 +17,10 @@ AddOption('--asan',
           action='store_true',
           help='turn on ASAN')
 
+AddOption('--compile_db',
+          action='store_true',
+          help='build clang compilation database')
+
 real_arch = arch = subprocess.check_output(["uname", "-m"], encoding='utf8').rstrip()
 if platform.system() == "Darwin":
   arch = "Darwin"
@@ -188,7 +192,7 @@ env = Environment(
   tools=["default", "cython", "compilation_db"],
 )
 
-if GetOption('test'):
+if GetOption('compile_db'):
   env.CompilationDatabase('compile_commands.json')
 
 if os.environ.get('SCONS_CACHE'):
